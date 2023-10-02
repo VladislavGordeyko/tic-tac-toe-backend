@@ -17,5 +17,5 @@ const server = http.createServer(app);
 setupWebSocket(server);
 
 server.listen(PORT, () => {
-  console.log(`Server started on http://localhost:${PORT}`);
+  console.log(`Server started on ${PORT} port`);
 });
