@@ -1,5 +1,15 @@
 {
   "version": 2,
-  "public": true,
-  "rewrites": [{ "source": "/api/(.*)", "destination": "/api" }]
+  "builds": [
+    {
+      "src": "index.ts",
+      "use": "@now/node"
+    }
+  ],
+  "routes": [
+    {
+      "src": "/(.*)",
+      "dest": "index.ts"
+    }
+  ]
 }
