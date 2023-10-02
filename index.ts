@@ -1,56 +1,21 @@
-// /**
-//  * This example demonstrates setting up a webook, and receiving
-//  * updates in your express app
-//  */
-// /* eslint-disable no-console */
+import express, { Express } from 'express';
+import cors from 'cors';
+import bodyParser from 'body-parser';
+import http from 'http';
+import setupWebSocket from './src/ws';
 import { env } from './config';
+import router from './src/routes';
 
-const { TOKEN, WEBHOOK, PORT } = env;
+const app: Express = express();
+app.use(cors());
+app.use(bodyParser.json());
+const { PORT } = env;
 
-const TelegramBot = require('node-telegram-bot-api');
-const express = require('express');
+app.use(router);
 
-// // No need to pass any parameters as we will handle the updates with Express
-const bot = new TelegramBot(TOKEN);
+const server = http.createServer(app);
+setupWebSocket(server);
 
-// // This informs the Telegram servers of the new webhook.
-bot.setWebHook(`${WEBHOOK}/bot${TOKEN}`);
-
-const app = express();
-
-// // parse the updates to JSON
-app.use(express.json());
-
-// // We are receiving updates at the route below!
-app.post(`/bot${TOKEN}`, (req: any, res: any) => {
-    console.log('POST! from bot')
-  bot.processUpdate(req.body);
-  res.sendStatus(200);
+server.listen(PORT, () => {
+  console.log(`Server started on ${PORT} port`);
 });
-
-// // Start Express Server
-app.listen(PORT, () => {
-  console.log(`Express server is listening on ${PORT}`);
-});
-
-// // Just to ping!
-bot.on('message', (msg: any) => {
-console.log('Message!')
-  bot.sendMessage(msg.chat.id, 'I am alive!');
-});
-
-// const express = require("express");
-
-// const app = express();
-
-// app.get("/", (req: any, res: any) => {
-//   res.send("Express on Vercel");
-// });
-
-// app.listen(5000, () => {
-//   console.log("Running on port 5000.");
-// });
-
-// // Export the Express API
-// module.exports = app;
-
