@@ -1,0 +1,11 @@
+{
+    "version": 2,
+    "public": true,
+    "rewrites": [
+      {
+        "source": "/(.*)",
+        "destination": "api/bot.ts"
+      }
+    ],
+    "redirects": [{ "source": "/", "destination": "/api", "permanent": false }]
+  }
