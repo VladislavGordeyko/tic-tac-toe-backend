@@ -1,3 +1,6 @@
+import { VercelRequest, VercelResponse } from '@vercel/node';
+import { env } from "../../config";
+const TelegramBot = require('node-telegram-bot-api');
 // https://github.com/yagop/node-telegram-bot-api/issues/319#issuecomment-324963294
 // import TelegramBot from 'node-telegram-bot-api';
 // import { botOptions, env } from "../config";
@@ -10,44 +13,50 @@
 // const bot = new TelegramBot(TOKEN, botOptions);
 
 
-// export default async function handle(req: any, res: any) {
-// 	try {
-// 		bot.onText(/\/start/, handleStart(bot));
-//     bot.onText(/\/hello/, handleHello(bot));
-//     bot.on('message', handleMessage(bot));
+export default async function handle(req: VercelRequest, res: VercelResponse) {
 
-// 	} catch (e: any) {
-// 		res.statusCode = 500;
-// 		res.setHeader("Content-Type", "text/html");
-// 		res.end("<h1>Server Error</h1><p>Sorry, there was a problem</p>");
-// 		console.error(e.message);
-// 	}
-// }
+    const { TOKEN, WEBHOOK } = env;
+    const bot = new TelegramBot(TOKEN);
+        try {
 
-import { VercelRequest, VercelResponse } from '@vercel/node';
-import { env } from "../config";
+            bot.on('message', (msg: any) => {
+                	const chatId = msg.chat.id;
+                	bot.sendMessage(chatId, 'Hello from bot!');
+                  });
+            // bot.onText(/\/start/, handleStart(bot));
+            // bot.onText(/\/hello/, handleHello(bot));
+            // bot.on('message', handleMessage(bot));
 
-const TelegramBot = require('node-telegram-bot-api');
-const { TOKEN, WEBHOOK } = env;
-const bot = new TelegramBot(TOKEN);
+        } catch (e: any) {
+            res.statusCode = 500;
+            res.setHeader("Content-Type", "text/html");
+            res.end("<h1>Server Error</h1><p>Sorry, there was a problem</p>");
+            console.error(e.message);
+        }
+}
 
-bot.setWebHook(`${WEBHOOK}/bot${TOKEN}`);
 
-// app.post(`/bot${TOKEN}`, (req, res) => {
-//     bot.processUpdate(req.body);
-//     res.sendStatus(200);
+
+
+
+
+// bot.setWebHook(`${WEBHOOK}/bot${TOKEN}`);
+
+// // app.post(`/bot${TOKEN}`, (req, res) => {
+// //     bot.processUpdate(req.body);
+// //     res.sendStatus(200);
+// //   });
+
+// bot.on('message', (msg: any) => {
+// 	const chatId = msg.chat.id;
+// 	bot.sendMessage(chatId, 'Hello from bot!');
 //   });
 
-bot.on('message', (msg: any) => {
-	const chatId = msg.chat.id;
-	bot.sendMessage(chatId, 'Hello from bot!');
-  });
-
-module.exports = (req: VercelRequest, res: VercelResponse) => {
-  const body = req.body;
-  bot.processUpdate(body);
-  res.status(200).send('Event received');
-};
+// module.exports = (req: VercelRequest, res: VercelResponse) => {
+//   const body = req.body;
+//   bot.processUpdate(body);
+//   res.status(200).send('Event received');
+// };
 
 
 // // https://github.com/yagop/node-telegram-bot-api/issues/319#issuecomment-324963294
