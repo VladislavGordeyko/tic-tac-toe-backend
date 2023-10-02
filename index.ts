@@ -5,8 +5,7 @@
 // /* eslint-disable no-console */
 import { env } from './config';
 
-const { TOKEN, WEBHOOK } = env;
-const port = process.env.PORT;
+const { TOKEN, WEBHOOK, PORT } = env;
 
 const TelegramBot = require('node-telegram-bot-api');
 const express = require('express');
@@ -30,13 +29,13 @@ app.post(`/bot${TOKEN}`, (req: any, res: any) => {
 });
 
 // // Start Express Server
-app.listen(port, () => {
-  console.log(`Express server is listening on ${port}`);
+app.listen(PORT, () => {
+  console.log(`Express server is listening on ${PORT}`);
 });
 
 // // Just to ping!
 bot.on('message', (msg: any) => {
-    console.log('Message!')
+console.log('Message!')
   bot.sendMessage(msg.chat.id, 'I am alive!');
 });
 
