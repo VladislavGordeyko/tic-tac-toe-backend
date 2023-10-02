@@ -9,9 +9,20 @@ const { TOKEN } = env;
 
 const bot = new TelegramBot(TOKEN, botOptions);
 
-bot.onText(/\/start/, handleStart(bot));
-bot.onText(/\/hello/, handleHello(bot));
-bot.on('message', handleMessage(bot));
+
+export default async function handle(req: any, res: any) {
+	try {
+		bot.onText(/\/start/, handleStart(bot));
+    bot.onText(/\/hello/, handleHello(bot));
+    bot.on('message', handleMessage(bot));
+
+	} catch (e: any) {
+		res.statusCode = 500;
+		res.setHeader("Content-Type", "text/html");
+		res.end("<h1>Server Error</h1><p>Sorry, there was a problem</p>");
+		console.error(e.message);
+	}
+}
 
 // Export as an asynchronous function
 // We'll wait until we've responded to the user
