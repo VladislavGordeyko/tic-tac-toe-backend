@@ -1,6 +1,4 @@
 {
     "version": 2,
-    "public": true,
-
-    "redirects": [{ "source": "/", "destination": "/api", "permanent": false }]
+    "public": true
   }
