@@ -9,32 +9,43 @@ const router = express.Router();
 //     sendMessageToTg(73630328, "message send from ticatactoe!");
 // });
 
-router.post('/inviteToGame', (req: Request, res: Response) => {
-    const postData: SendMessageChatData = req.body;
-    console.log('/inviteToGame', postData);
 
-    sendGameInviteToChat(postData.message, postData.chatId, postData.sessionId);
+
+
+
+
+// router.post('/inviteToGame', (req: Request, res: Response) => {
+//     const postData: SendMessageChatData = req.body;
+//     console.log('/inviteToGame', postData);
+
+//     sendGameInviteToChat(postData.message, postData.chatId, postData.sessionId);
   
-    res.json({
-        status: 'success',
-        message: 'Data received!',
-        data: postData
-    });
-});
+//     res.json({
+//         status: 'success',
+//         message: 'Data received!',
+//         data: postData
+//     });
+// });
 
-router.get('/getUserPhoto', (req: Request, res: Response) => {
-    const userId = req.query.userId as string;
-    console.log({userId})
-    if (userId) {
-        getUserPhoto(userId);
-    }
+// router.get('/getUserPhoto', (req: Request, res: Response) => {
+//     const userId = req.query.userId as string;
+//     console.log({userId})
+//     if (userId) {
+//         getUserPhoto(userId);
+//     }
 
-    res.json({
-        status: 'success',
-        message: 'Data received!',
-        data: ''
-    });
-});
+//     res.json({
+//         status: 'success',
+//         message: 'Data received!',
+//         data: ''
+//     });
+// });
+
+
+
+
+
+
 
 // router.post('/', (req: Request, res: Response) => {
 //     const postData: PostData = req.body;
