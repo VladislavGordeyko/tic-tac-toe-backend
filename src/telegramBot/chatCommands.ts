@@ -1,5 +1,6 @@
 import TelegramBot, { Message } from 'node-telegram-bot-api';
 import { env } from '../../config';
+import { WELCOMETEXT } from './constants';
 
 const { WEBAPPURLTELEGRAM } = env;
 
