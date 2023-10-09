@@ -56,12 +56,12 @@ export const joinSession = async (data: any, clientId: string, ws: WebSocket) =>
     if (sessions[sessionId].players.length < 2) {
         const player: IPlayer = { ...user, score: 0, isCurrentMove: false };
         sessions[sessionId].players.push(player);
+        session.gameStatus.started = true;
     } else {
         sessions[sessionId].spectators.push(user);
     }
-    session.gameStatus.started = true;
-    const userToStart = session.players.filter(player => player.clientId === clientId)[0];
-    session.gameStatus.status = `Next player: ${userToStart?.userName || 'X'}`;
+    // const userToStart = session.players.filter(player => player.clientId === clientId)[0];
+    // session.gameStatus.status = `Next player: ${userToStart?.userName || 'X'}`;
 
     const payload = {
         type: WSMessageType.SESSION_JOINED,
