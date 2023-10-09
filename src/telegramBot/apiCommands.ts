@@ -21,7 +21,6 @@ export const getUserPhotoLink = async (bot: TelegramBot, userId: string) => {
     try {
        
         const result = await bot.getUserProfilePhotos(Number(userId), {limit: 0, offset: 0});
-        console.log({userId}, {result});
         if (result.total_count > 0) {
             const link = await getFileLink(bot, result.photos[0][0].file_id);
             return link;

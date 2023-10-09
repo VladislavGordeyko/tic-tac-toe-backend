@@ -32,7 +32,7 @@ export const clearPlayersMove = (players: IPlayer[]) => {
 
 
 export const sendToAllClientsInSession = (session: ISession, connectedClients: IClientArray, payload: IGamePayload) => {
-    console.log('Sending to all clients', {payload});
+    // console.log('Sending to all clients', {payload});
     session.players.concat(session.spectators as IPlayer[]).forEach(user => {
         connectedClients[user.clientId].ws.send(JSON.stringify(payload));
       });
