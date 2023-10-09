@@ -1,0 +1,2 @@
+const INVITETEXT = `Hey there! Want to play a round of Tic Tac Toe? Someone start the game and let's see who emerges as the champion!`
+const WELCOMETEXT = `👋 Welcome to the Tic Tac Toe Bot! 🎮 Ready for some fun? Here, you can play the classic Tic Tac Toe game. To play with friends, add this bot to a group and type /start there. If you'd like to challenge our bot, just start a game here. Let the games begin! ✖️⭕️`

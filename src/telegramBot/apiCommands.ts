@@ -32,11 +32,11 @@ export const getUserPhotoLink = async (bot: TelegramBot, userId: string) => {
 }
 
 export const sendGameInviteToChat = (bot: TelegramBot, message: string, chatId: string, sessionId: string,) => {
-    bot.sendMessage(chatId, "Join game!", {
+    bot.sendMessage(chatId, INVITETEXT, {
         reply_markup: {
             inline_keyboard: [[
                 {
-                    text: message,
+                    text: 'Join Game!',
                     url: `${WEBAPPURLTELEGRAM}?startapp=sessionId__${sessionId}`,
                 }
             ]] 
