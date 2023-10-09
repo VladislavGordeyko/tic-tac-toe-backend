@@ -12,8 +12,24 @@ export const botProcessUpdate = (bot: TelegramBot, req: Request) => {
     bot.processUpdate(req.body);
 }
 
-export const getUserPhoto = (bot: TelegramBot, userId: string) => {
-    bot.getUserProfilePhotos(Number(userId)).then((data: any)=> console.log({data}));
+export const getFileLink = async (bot: TelegramBot, fileId: string) => {
+    const link = await bot.getFileLink(fileId);
+    return link;
+}
+
+export const getUserPhotoLink = async (bot: TelegramBot, userId: string) => {
+    try {
+       
+        const result = await bot.getUserProfilePhotos(Number(userId), {limit: 0, offset: 0});
+        console.log({userId}, {result});
+        if (result.total_count > 0) {
+            const link = await getFileLink(bot, result.photos[0][0].file_id);
+            return link;
+        }
+        return ''; 
+    } catch (error) {
+        return ''; 
+    }
 }
 
 export const sendGameInviteToChat = (bot: TelegramBot, message: string, chatId: string, sessionId: string,) => {

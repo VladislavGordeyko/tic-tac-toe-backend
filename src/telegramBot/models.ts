@@ -1,8 +1,8 @@
-export type PostData = {
+export interface IPostData  {
     sessionId: string;
 };
 
-export type SendMessageChatData = {
+export interface ISendMessageChatData {
     message: string,
     chatId: string,
     sessionId: string,

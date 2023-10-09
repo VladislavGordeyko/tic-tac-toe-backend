@@ -5,7 +5,6 @@ const { WEBAPPURLTELEGRAM } = env;
 
 export const startGameCommand = (bot: TelegramBot) => (msg: Message) => {
     const chatId = msg.chat.id;
-    console.log(msg.from?.id)
 
     bot.sendMessage(chatId, "Welcome", {
         reply_markup: {

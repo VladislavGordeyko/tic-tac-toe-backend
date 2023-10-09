@@ -2,7 +2,7 @@ import express, { Express } from 'express';
 import cors from 'cors';
 import bodyParser from 'body-parser';
 import http from 'http';
-import setupWebSocket from './src/ws';
+import setupWebSocket from './src/websockets/ws';
 import { env } from './config';
 import router from './src/routes';
 

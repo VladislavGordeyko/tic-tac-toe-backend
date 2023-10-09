@@ -1,29 +1,21 @@
 import { Request, Response } from 'express';
-import { SendMessageChatData } from '../models/tgPostData';
-import bot from '../telegram';
-import { botProcessUpdate, getUserPhoto, sendGameInviteToChat } from '../telegram/apiCommands';
+import { ISendMessageChatData } from '../telegramBot/models';
+import bot from '../telegramBot';
+import { botProcessUpdate, getUserPhotoLink, sendGameInviteToChat } from '../telegramBot/apiCommands';
 import { env } from '../../config';
 
 const express = require('express');
 const router = express.Router();
 
-
 const { TOKEN } = env;
-// router.get('/', (req: Request, res: Response) => {
-//     sendMessageToTg(73630328, "message send from ticatactoe!");
-// });
 
 router.post(`/bot${TOKEN}`, (req: Request, res: Response) => {
-    console.log('POST! from bot');
     botProcessUpdate(bot, req);
     res.sendStatus(200);
 });
 
-
-
 router.post('/inviteToGame', (req: Request, res: Response) => {
-    const postData: SendMessageChatData = req.body;
-    console.log('/inviteToGame', postData);
+    const postData: ISendMessageChatData = req.body;
 
     sendGameInviteToChat(bot, postData.message, postData.chatId, postData.sessionId);
   
@@ -36,9 +28,8 @@ router.post('/inviteToGame', (req: Request, res: Response) => {
 
 router.get('/getUserPhoto', (req: Request, res: Response) => {
     const userId = req.query.userId as string;
-    console.log({userId})
     if (userId) {
-        getUserPhoto(bot, userId);
+        getUserPhotoLink(bot, userId);
     }
 
     res.json({
