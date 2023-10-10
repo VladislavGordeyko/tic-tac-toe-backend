@@ -14,12 +14,12 @@ export function getInitialGameStatus(nextPlayerMove?: IPlayer, hasStarted?: bool
 }
 
 // Finds a player from a list based on client ID.
-export const findPlayerByClientId = (players: IPlayer[], clientId: string)  =>
+export const findPlayerByClientId = (players: Array<any>, clientId: string)  =>
   players.find(player => player.clientId === clientId);
 
 
 // Finds an opponent from a list based on client ID.
-export const findOpponentByClientId = (players: IPlayer[], clientId: string) =>
+export const findOpponentByClientId = (players:Array<any>, clientId: string) =>
   players.find(player => player.clientId !== clientId);
 
 // Get a list of players that remain after removing a specified player by client ID.
