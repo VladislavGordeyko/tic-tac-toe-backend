@@ -1,6 +1,6 @@
 export interface IPostData  {
     sessionId: string;
-};
+}
 
 export interface ISendMessageChatData {
     message: string,

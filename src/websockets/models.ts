@@ -35,24 +35,24 @@ export interface ITelegramData  {
     start_param?: string,
   }
   
-  export interface IClient  {
+export interface IClient  {
       clientId: string;
       ws: WebSocket;
-    };
+    }
   
-    export interface IBaseClient  {
+export interface IBaseClient  {
       clientId: string,
       userName: string,
       tgId: string,
       avatar?: string,
     }
   
-    export interface IPlayer extends IBaseClient {
+export interface IPlayer extends IBaseClient {
       score: number,
       isCurrentMove: boolean,
     }
   
-    export interface IGameStatus  {
+export interface IGameStatus  {
       squares: SquareValue[],
       currentMoveClientId: string,
       isXNext: boolean,
@@ -63,17 +63,17 @@ export interface ITelegramData  {
       status: string,
     }
   
-    export interface ISession  {
+export interface ISession  {
       id: string;
       players: IPlayer[];
       spectators: IBaseClient[];
       gameStatus: IGameStatus;
-    };
+    }
 
-    export interface ISessionArray { 
+export interface ISessionArray { 
       [id: string]: ISession 
     }
 
-    export interface IClientArray { 
+export interface IClientArray { 
       [clientId: string]: IClient
     }
