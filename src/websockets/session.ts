@@ -53,22 +53,23 @@ export const joinSession = async (data: any, clientId: string, ws: WebSocket) =>
 
   const session = sessions[sessionId];
   const user = await createUser(data.telegramData, clientId);
-  if (sessions[sessionId].players.length < 2) {
+  if (session.players.length < 2) {
     const player: IPlayer = { ...user, score: 0, isCurrentMove: false };
-    sessions[sessionId].players.push(player);
+    session.players.push(player);
     session.gameStatus.started = true;
+    session.players[0].isCurrentMove = true;
   } else {
-    sessions[sessionId].spectators.push(user);
+    session.spectators.push(user);
   }
-  
+
   const payload = {
     type: WSMessageType.SESSION_JOINED,
     sessionId,
-    gameStatus: sessions[sessionId].gameStatus,
+    gameStatus: session.gameStatus,
     clientId,
-    players: sessions[sessionId].players,
-    spectators: sessions[sessionId].spectators
+    players: session.players,
+    spectators: session.spectators
   };
 
-  sendToAllClientsInSession(sessions[sessionId], connectedClients, payload);
+  sendToAllClientsInSession(session, connectedClients, payload);
 };
