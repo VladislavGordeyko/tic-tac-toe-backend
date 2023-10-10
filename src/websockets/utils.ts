@@ -1,5 +1,6 @@
 import { IGamePayload, IPlayer, IClientArray, ISession, IBaseClient, SquareValue } from './models';
 
+// Generate initial state for the game board and game status.
 export function getInitialGameStatus(nextPlayerMove?: IPlayer, hasStarted?: boolean) {
   return {
     squares: Array(9).fill(null),
@@ -12,37 +13,44 @@ export function getInitialGameStatus(nextPlayerMove?: IPlayer, hasStarted?: bool
   };
 }
 
-export const findPlayerByClientId = (players: Array<any>, clientId: string) : IPlayer =>
+// Finds a player from a list based on client ID.
+export const findPlayerByClientId = (players: IPlayer[], clientId: string)  =>
   players.find(player => player.clientId === clientId);
 
-export const findOpponentByClientId = (players: Array<any>, clientId: string) : IPlayer =>
+
+// Finds an opponent from a list based on client ID.
+export const findOpponentByClientId = (players: IPlayer[], clientId: string) =>
   players.find(player => player.clientId !== clientId);
 
+// Get a list of players that remain after removing a specified player by client ID.
 export const getRemainingPlayers = (players: IPlayer[], clientId: string) : IPlayer[] => {
   return players.filter(player => player.clientId !== clientId);
 };
 
+// Get a list of spectators that remain after removing a specified spectator by client ID.
 export const getRemainingSpectators = (spectators: IBaseClient[], clientId: string) => {
   return spectators.filter(spectator => spectator.clientId !== clientId);
 };
 
+//  Resets the move state for all players.
 export const clearPlayersMove = (players: IPlayer[]) => {
   players.map(player => player.isCurrentMove = false);
 };
 
-
+// Sends a payload to all clients within a specified session.
 export const sendToAllClientsInSession = (session: ISession, connectedClients: IClientArray, payload: IGamePayload) => {
   session.players.concat(session.spectators as IPlayer[]).forEach(user => {
     connectedClients[user.clientId].ws.send(JSON.stringify(payload));
   });
 };
 
+// Randomly selects a player from a list to make the next move.
 export const getRandomPlayerForNextMove = (players: IPlayer[]) => {
   const randomIndex = Math.floor(Math.random() * players.length);
   return players[randomIndex];
 };
 
-
+// Calculates the winner of the game based on the current board state.
 export const calculateWinner = (squares: SquareValue[]): SquareValue => {
   const lines = [
     [0, 1, 2],

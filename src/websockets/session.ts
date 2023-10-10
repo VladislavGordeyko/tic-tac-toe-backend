@@ -7,7 +7,8 @@ import { connectedClients, sessions } from './ws';
 import { WebSocket } from 'ws';
 import { sendSessionError } from './error';
 
-const createUser = async (data: ITelegramData, clientId: string) => {
+// Create a user object from provided Telegram data and fetch their avatar
+const createUserWithAvatar = async (data: ITelegramData, clientId: string) => {
   const avatar = await getUserPhotoLink(bot, data.user?.id);
   return {
     clientId,
@@ -17,11 +18,13 @@ const createUser = async (data: ITelegramData, clientId: string) => {
   };
 };
 
+// Handle the creation of a new game session
 export const createSession = async (data: any, clientId: string, ws: WebSocket) => {
   const sessionId = uuidv4();
-  const user = await createUser(data.telegramData, clientId);
+  const user = await createUserWithAvatar(data.telegramData, clientId);
   const player: IPlayer = { ...user, score: 0, isCurrentMove: true };
 
+  // Create a new session with the initiating player
   const newSession: ISession = {
     id: sessionId,
     spectators: [],
@@ -29,7 +32,7 @@ export const createSession = async (data: any, clientId: string, ws: WebSocket) 
     gameStatus: getInitialGameStatus(player),
   };
 
-  sessions[sessionId] = newSession;
+  sessions[sessionId] = newSession; // Store the session
 
   const payload: IGamePayload = { 
     type: WSMessageType.SESSION_CREATED, 
@@ -39,9 +42,10 @@ export const createSession = async (data: any, clientId: string, ws: WebSocket) 
     players: newSession.players 
   };
 
-  ws.send(JSON.stringify(payload));
+  ws.send(JSON.stringify(payload)); // Notify the client about the created session
 };
 
+// Handle a client's request to join an existing game session
 export const joinSession = async (data: any, clientId: string, ws: WebSocket) => {
   const sessionId = data.sessionId;
 
@@ -52,13 +56,16 @@ export const joinSession = async (data: any, clientId: string, ws: WebSocket) =>
   }
 
   const session = sessions[sessionId];
-  const user = await createUser(data.telegramData, clientId);
+  const user = await createUserWithAvatar(data.telegramData, clientId);
+  
   if (session.players.length < 2) {
+    // If the session has less than 2 players, let this client join as a player
     const player: IPlayer = { ...user, score: 0, isCurrentMove: false };
     session.players.push(player);
     session.gameStatus.started = true;
     session.players[0].isCurrentMove = true;
   } else {
+    // Otherwise, this client joins as a spectator
     session.spectators.push(user);
   }
 
@@ -71,5 +78,6 @@ export const joinSession = async (data: any, clientId: string, ws: WebSocket) =>
     spectators: session.spectators
   };
 
+  // Notify all clients in the session about the new participant
   sendToAllClientsInSession(session, connectedClients, payload);
 };

@@ -4,6 +4,7 @@ import { connectedClients, sessions } from './ws';
 import { sendSessionError } from './error';
 import { IGamePayload, IGameStatus, IPlayer, WSMessageType } from './models';
 
+// Concludes the game session by marking the given player as the winner
 const concludeGameAsWon = (winner: IPlayer, gameStatus: IGameStatus) => {
   gameStatus.isFinished = true;
   gameStatus.winnerUserName = winner.userName;
@@ -11,19 +12,21 @@ const concludeGameAsWon = (winner: IPlayer, gameStatus: IGameStatus) => {
   winner.isCurrentMove = false;
   gameStatus.status = `Winner: ${gameStatus.winnerUserName}!`;
 };
-  
+
+// Concludes the game session as a draw
 const concludeGameAsDraw = (gameStatus: IGameStatus) => {
   gameStatus.status = 'Draw!';
   gameStatus.isFinished = true;
 };
   
+// Updates the game status to continue with the next move
 const continueGame = (currentPlayer: IPlayer, opponent: IPlayer, gameStatus: IGameStatus) => {
   opponent.isCurrentMove = true;
   currentPlayer.isCurrentMove = false;
   gameStatus.status = `Next player: ${opponent.userName ? opponent.userName : gameStatus.isXNext ? 'X' : 'O'}`;
 };
 
-
+// Processes a move in the game, updating the game state accordingly
 export const gameMove = (data: any, ws: WebSocket) => {
   const sessionId = data.sessionId;
 
@@ -35,6 +38,7 @@ export const gameMove = (data: any, ws: WebSocket) => {
   const { gameStatus } = session;
   const squareIndex = data.index;
 
+  // Proceed only if the selected square is empty
   if (gameStatus.squares[squareIndex] === null) {
     const currentPlayer = findPlayerByClientId(session.players, data.clientId);
     const opponent = findOpponentByClientId(session.players, data.clientId);
@@ -58,16 +62,18 @@ export const gameMove = (data: any, ws: WebSocket) => {
       players: session.players,
     }; 
       
+    // Notify all clients in the session about the game update
     sendToAllClientsInSession(session, connectedClients, payload);
   }
 };
 
+// Resets the game state, allowing players to start a new round
 export const restartGame = (data: any) => {
   const sessionId = data.sessionId;
 
   if (sessions[sessionId]) {
     const session = sessions[sessionId];
-    clearPlayersMove(session.players);
+    clearPlayersMove(session.players); 
     const nextPlayerMove = getRandomPlayerForNextMove(session.players);
     nextPlayerMove.isCurrentMove = true;
     session.gameStatus = getInitialGameStatus(nextPlayerMove, true);
@@ -76,6 +82,8 @@ export const restartGame = (data: any) => {
       gameStatus: session.gameStatus,
       players: session.players,
     };
+
+    // Notify all clients about the game restart
     sendToAllClientsInSession(session, connectedClients, payload);
   }
 };

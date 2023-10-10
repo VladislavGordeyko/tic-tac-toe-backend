@@ -4,9 +4,12 @@ import { WELCOMETEXTGROUP, WELCOMETEXTPRIVATE } from './constants';
 
 const { WEBAPPURLTELEGRAM } = env;
 
+// Handles the /start command for the bot.
+// Sends a game start link depending on whether the command came from a private chat or a group chat.
 export const startGameCommand = (bot: TelegramBot) => (msg: Message) => {
   const chatId = msg.chat.id;
 
+  // If the command is from a private chat, send the private welcome text.
   if (msg.chat.type === 'private') {
     bot.sendMessage(chatId, WELCOMETEXTPRIVATE, {
       reply_markup: {
@@ -18,6 +21,7 @@ export const startGameCommand = (bot: TelegramBot) => (msg: Message) => {
         ]]
       }
     });
+    // If the command is from a group or supergroup, send the group welcome text.
   } else if (msg.chat.type === 'group' || msg.chat.type === 'supergroup') {
     bot.sendMessage(chatId, WELCOMETEXTGROUP, {
       reply_markup: {
